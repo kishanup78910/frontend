@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { Link } from 'react-router-dom';
 import Registration from './Registration';
-
+import axios from 'axios';
 
 const Login = () => {
 
@@ -17,13 +17,27 @@ const Login = () => {
    
     }
 
-    const handlesubmit=(e)=>{
+    const handlesubmit=async(e)=>{
      e.preventDefault();
      try{
-        // const response = 
-     }catch(err){
+        const response = await axios.post(
+            'http://localhost:8000/login',loginData
+        )
+        const {success,message}=response.data;
 
+        if(success){
+            console.log("Login successfully");
+        }else{
+            console.log(message)
+        }
+     }catch(error){
+      console.error("login error",error);
      }
+
+     setLoginData({
+        username:"",
+        password:""
+     })
     }
   return (
     <div>
@@ -38,7 +52,7 @@ const Login = () => {
             Login
         </button>
         <p>Note register yet?
-            <Link to='./Registration'>Register here</Link>
+            <Link to='./register'>Register here</Link>
         </p>
      </form>
     </div>
